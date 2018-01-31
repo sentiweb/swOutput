@@ -2,6 +2,6 @@
   defaults = list(
     default.level =  4
   )
-  set_options(defaults)
+  do.call(output_options, defaults)
   invisible()
 }

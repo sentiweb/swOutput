@@ -2,7 +2,7 @@
 #' pander Driver
 #'
 
-output_open.pander = function(filename, titre) {
+output_open.pander = function(filename, title) {
   library(pander)
 
   fn = file.path(.config$path, paste0(filename, ".", "md"))
@@ -15,7 +15,7 @@ output_open.pander = function(filename, titre) {
 }
 
 output_done.pander <- function() {
-  opts = get_option('pander')
+  opts = output_option('pander')
   formats = opts$formats
   if( is.null(formats) ) {
       formats = c('html','docx')
@@ -33,7 +33,7 @@ write_to_pander = function(o) {
 #' xprint print to the output
 #' @method xprint_pander default
 xprint_pander <- function(x, title="",...) {
-    UseMethod("xprint")
+    UseMethod("xprint_pander")
 }
 
 xprint_pander.default = function(x, ...) {

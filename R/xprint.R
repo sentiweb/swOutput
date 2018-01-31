@@ -4,7 +4,8 @@ call_driver_function = function(.func_name, ...) {
     stop('No driver initialized')
   }
   driver_func = paste0(.func_name,"_", .config$driver)
-  call(driver_func, ...)
+  args = alist(...)
+  do.call(driver_func, args)
 }
 
 #' Output object using current driver

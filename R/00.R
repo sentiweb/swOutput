@@ -33,9 +33,9 @@ out.path = function(...) {
   paste0(.config$path, ...)
 }
 
-#' Get package options
-#' From 'redis.progress' options() entry
-get_option = function(name=NULL) {
+#' Get package option from name
+#' From 'swOutput' options() entry
+output_option = function(name=NULL) {
   o = getOption("swOutput")
   if(is.null(name)) {
     o
@@ -44,22 +44,34 @@ get_option = function(name=NULL) {
   }
 }
 
-set_options = function(w) {
-  o = get_option()
-  if( is.null(o) ) {
-    o = w
-  } else {
-    for(n in names(w)) {
-      if(is.null(o[[n]])) {
-        o[[n]] = w[[n]]
-      }
-    }
+output_options = function(...) {
+  opts = list(...)
+  oo = getOption("swOutput")
+  if( is.null(oo) ) {
+    oo = list()
   }
-  base::options("swOutput"=o)
+  if(length(opts) == 0) {
+    return(oo)
+  }
+  nn = names(opts)
+  # No names, then list of opts to return
+  if( is.null(nn) ) {
+    if(length(opts) == 1) {
+      return(oo[[unlist(opts)]])
+    }
+    return(oo[unlist(opts)])
+  }
+  # Value with names, replace
+  for(i in seq_along(opts)) {
+    n = nn[i]
+    o = opts[[i]]
+    oo[[n]] <- o
+  }
+  base::options("swOutput"=oo)
 }
 
 is_debug <- function() {
-  isTRUE(get_option('debug'))
+  isTRUE(output_option('debug'))
 }
 
 safe.cat <- cat

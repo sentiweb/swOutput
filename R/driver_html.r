@@ -1,14 +1,15 @@
-#' Bilan annuel du reseau Sentinelles
+#' Sentiweb Output Library
 #' HTML Output
 
 #' @noRd
-output_open.html = function(filename, titre) {
+output_open.html = function(filename, title) {
   library(R2HTML)
   options(R2HTML.format.digits=10)
 
- opts = get_option()
+ opts = output_option()
 
  css = opts$html$css
+
  if( is.null(css) ) {
     theme = ifelse( is.null(opts$html$theme), "serious", opts$html$theme )
     css = file(package_data_file(paste0(theme,'.css')))
@@ -18,6 +19,7 @@ output_open.html = function(filename, titre) {
    do.copy = F
    inline_css = F
  }
+
  if( inline_css ) {
   css_tag = paste(readLines(css), collapse="\n")
   close(css)
@@ -31,7 +33,7 @@ output_open.html = function(filename, titre) {
   css_tag = paste0('<style>', css_tag, '</style>')
  } else {
    if(do.copy) {
-     target.css = paste(opts$path, basename(css))
+     target.css = paste(.config$path, basename(css))
      if( !file.exists(target.css) | ( file.info(target.css)$mtime < file.info(css)$mtime)  ) {
        file.copy(css , target.css,  overwrite = T)
      }
@@ -44,7 +46,7 @@ output_open.html = function(filename, titre) {
  h = ifelse(is.null(h), "", h)
  h = paste(h, collapse="\n")
 
- file <- file.path(opts$path, paste0(filename, ".", "html"))
+ file <- file.path(.config$path, paste0(filename, ".", "html"))
 
  assign(".HTML.file", file, envir = .GlobalEnv)
 
@@ -54,9 +56,7 @@ output_open.html = function(filename, titre) {
 
  .config$block.level <- NULL
 
- set_options(opts)
-
- txt <- paste0("<html>\n<head>\n<title>",titre,"</title>\n", css_tag, h,"</head><body>")
+ txt <- paste0("<html>\n<head>\n<title>",title,"</title>\n", css_tag, h,"</head><body>")
  cat(txt, file = file, append = FALSE)
 }
 
@@ -79,6 +79,7 @@ xdiv = function(x,...) {
 }
 
 #' Add an alert section in the output
+#' @rdname xalert
 xalert_html = function(x, type="warning", ...) {
   clz = c("alert", paste0("alert-", type))
   xtag("p", value=x, attr=list(class=paste(clz, collapse = " ")))
@@ -125,13 +126,13 @@ xhtml <- function(...) {
 #' xprint print to the output
 #' @method xprint default
 xprint_html <- function(x, title="",...) {
- UseMethod("xprint")
+ UseMethod("xprint_html")
 }
 
 # Output function
 #' @method xprint character
 xprint_html.character <- function(x, title="", class="character", ...) {
-  if(isTRUE(share.option('output')$debug)) {
+  if(is_debug()) {
    cat("xprint.char\n")
   }
  xtag('p', x, list('class'=class))
@@ -147,7 +148,7 @@ xprint_html.character <- function(x, title="", class="character", ...) {
 #' affiche une variable x
 #' @method xprint default
 xprint_html.default <-  function(x, title="", ...) {
-  if(isTRUE(share.option('output')$debug)) {
+  if(is_debug()) {
    cat("xprint.default\n")
   }
   xhtml('<div class="default">')
@@ -268,7 +269,7 @@ xcat_html =  function(..., style=NULL, ln=T) {
 #' Render a title section
 xtitle_html = function(..., level=NULL) {
  if( is.null(level) ) {
-    level = get_option('default.level')
+    level = output_option('default.level')
  }
   HTML.title(paste(...),HR=level)
 }
