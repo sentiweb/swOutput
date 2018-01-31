@@ -281,7 +281,7 @@ xtitle_html = function(..., level=NULL) {
 #' @usage
 #'  xbloc("my title")
 #'  xbloc(end=T)
-xbloc_html = function(title=NULL, end=F, style=NULL) {
+xbloc_html = function(title=NULL, end=F, style=NULL, ...) {
  block.level = .config$block.level
  if(end) {
   xhtml('</div></div>')
