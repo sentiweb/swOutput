@@ -1,14 +1,4 @@
 
-
-##
-# Doc d'utilisation
-##
-#' Return the absolute path of a file inside the output path
-#' @param ... relative path inside the output path
-out.path = function(...) {
-  paste0(get_option('path'), ...)
-}
-
 #' Start the output using a given output driver
 #' @param path path of the output
 #' @param filename to use (no extension)
@@ -16,55 +6,55 @@ out.path = function(...) {
 #' @param type output driver to use
 #' @param opts list of options
 #' @param plugins list of plugins
-#' @param titre (for compatibility, do not use)
+#' @export
 init.output <- function(path=getwd(), filename="result", title="", type='console', opts=NULL, plugins=NULL) {
-  if( !is.null(titre) ) {
-    warning("init.output: 'titre' parameter is deprecated, replace by title")
-    title = titre
-  }
-
 
   if( length(grep("/$",path)) == 0 ) {
     path = paste0(path,'/')
   }
 
-  opts$path <- path
-  opts$type <- type
+  .config$path <- path
+  .config$driver = type
 
   if( is.null(opts$handlers) ) {
     opts$handlers$file = .output_file
   }
 
-  source(share.path(paste0("lib/output/",type,".r")))
   if( !is.null(plugins) ) {
-	lib.path = share.path("lib/output/")
-	for(p in plugins) {
-		p = gsub("@", lib.path, p) # Allow to refer to share output plugins using "@" prefix
-		p = paste0(p,"/",type, ".r")
-		if( file.exists(p) ) {
-		    source(p)
-		}
-	}
+  	lib.path = get_option('plugins_path')
+  	for(p in plugins) {
+  	  if( !is.null(lib.path) ) {
+  	    # Allow to refer to share output plugins using "@" prefix
+  	  	p = gsub("@", lib.path, p)
+  	  }
+  	  p = paste0(p, "/", type, ".r")
+  		if( file.exists(p) ) {
+  		    source(p)
+  		}
+  	}
   }
 
   dir.create(path, recursive=T, showWarnings=F)
 
   # Compatibility issues
-  xblock <<- xbloc
-  share.option(output=opts)
+  set_options(opts)
+
   if( !is.null(filename) ) {
-    invisible(.output.open(filename, titre))
+    open_func = paste0("output_open.", type)
+    invisible(call(open_func, filename=filename, titre=titre))
   }
 }
 
 #' Start a new file (using same output context defined in init.outpu)
 start.output <- function(filename, titre="") {
-  .output.open(filename,titre)
+  open_func = paste0("output_open.", .config$driver)
+  invisible(call(open_func, filename=filename, titre=titre))
 }
 
 #' Stop the current outpout and close the output file
 close.output <- function() {
- .output.done()
+  close_func = paste0("output_done.", .config$driver)
+  do.call(close_func)
 }
 
 #' Last graph sent to the outpout
@@ -79,7 +69,7 @@ out.title <- function(...) {
 #'
 #' Apply Output handlers
 output_handlers = function(x, ... ) {
-    opts = share.option('output')
+    opts = get_option()
     handlers = opts$handlers
     if(is.null(handlers)) {
         return()
@@ -102,7 +92,7 @@ output_handlers = function(x, ... ) {
 #' Main Generic function to output variable
 #' Render an object to the ouput
 out <- function(x, title=deparse(substitute(x)), ...) {
- if(isTRUE(share.option('output')$debug)) {
+ if( is_debug() ) {
    cat("[out] ",paste(class(x), collapse=' '),"\n")
  }
  output_handlers(x, title=title, ...)
@@ -119,9 +109,9 @@ out <- function(x, title=deparse(substitute(x)), ...) {
 out.default <- function(x, name=NULL, title="", main="", ... ) {
  title = ifelse(!is.null(main) && main != "", main, ifelse(is.null(title),"",title))
 
- if( isTRUE(share.option('output')$debug) ) {
-   cat("[out.default] ",paste(class(x),collapse=' '),"\n")
-   cat("title=",title,"main=",main,"\n")
+ if( is_debug() ) {
+   cat("[out.default] ", paste(class(x), collapse=' '),"\n")
+   cat("title=", title, "main=",main, "\n")
  }
  xprint(x, title=title, ...)
  invisible()
@@ -130,7 +120,7 @@ out.default <- function(x, name=NULL, title="", main="", ... ) {
 #' out for factors
 #' @method out factor
 out.factor <- function(x, title="", ...) {
- if(isTRUE(share.option('output')$debug) ) {
+ if( is_debug() ) {
    cat("[out.factor] ",paste(class(x),collapse=' '),"\n")
  }
  if(length(x) == 0) {
@@ -171,7 +161,7 @@ output_file.default <- function(data, name=NULL, ...) {
     # It may not work if another out.path is created in a local environment
     if( !is.data.frame(data) ) {
         d = try(as.data.frame(as.list(data)), silent=T)
-        if( is.error(d) ) {
+        if( "try-error" %in% class(d) ) {
             warning("unable to transform", deparse(substitute(data))," to data.frame")
             return()
         }

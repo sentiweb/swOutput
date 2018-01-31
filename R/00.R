@@ -27,6 +27,11 @@ NULL # do not remove this null
 
 .config = new.env(parent=emptyenv())
 
+#' Return the absolute path of a file inside the output path
+#' @param ... relative path inside the output path
+out.path = function(...) {
+  paste0(.config$path, ...)
+}
 
 #' Get package options
 #' From 'redis.progress' options() entry
@@ -38,3 +43,28 @@ get_option = function(name=NULL) {
     o[[name]]
   }
 }
+
+set_options = function(w) {
+  o = get_option()
+  if( is.null(o) ) {
+    o = w
+  } else {
+    for(n in names(w)) {
+      if(is.null(o[[n]])) {
+        o[[n]] = w[[n]]
+      }
+    }
+  }
+  base::options("swOutput"=o)
+}
+
+is_debug <- function() {
+  isTRUE(get_option('debug'))
+}
+
+safe.cat <- cat
+
+package_data_file = function(file) {
+  system.file("data", file, package = "swOutput")
+}
+
