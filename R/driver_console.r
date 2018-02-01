@@ -2,11 +2,11 @@
 
 #' Open output console driver
 #' @rdname output_open
-output_open.console <- function(filename, title) {}
+output_open_console <- function(filename, title) {}
 
 #' Close output console driver
 #' @rdname output_open
-output_done.console <- function() {
+output_done_console <- function() {
 }
 
 #' Output function for console driver
@@ -43,8 +43,12 @@ xbloc_console <- function(..., end=F) {
 #' @rdname xheader
 xheader_console <- function() {}
 
-xheader.end_console <- function() {}
+xheader_end_console <- function() {}
 
 #' add a link
 #' @rdname xlink
 xlink_console = function(filename, text, attr=NULL) {}
+
+output_graph_console = function(...) {
+  # Nothing to do
+}

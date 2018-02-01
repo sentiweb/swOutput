@@ -48,11 +48,28 @@ output_option = function(name=NULL) {
 
 #' SwOutput Options
 #'
-#' \describe {
+#' @param ... list of options to replace (at 1 level)
+#'
+#' @details
+#'
+#' Main options (1st level)
+#' \describe{
 #'  \item{handlers}{list of handlers type=func}
 #'  \item{default.level}{default level of title}
 #'  \item{plugins_path}{path of plugins}
+#'  \item{html}{html driver options}
+#'  \item{pander}{pander driver options}
+#'  \item{inline_css}{add inline css deprecated}
 #' }
+#'
+#' HTML options
+#' \describe{
+#'  \item{css}{css file path}
+#'  \item{theme}{theme name if css not specified}
+#'  \item{css.extra}{extra css files}
+#'  \item{header}{header content or function returning header content}
+#' }
+#'
 output_options = function(...) {
   opts = list(...)
   oo = getOption("swOutput")
@@ -85,8 +102,8 @@ is_debug <- function() {
   isTRUE(output_option('debug'))
 }
 
-#' @noRd
 #' Deprecated
+#' @noRd
 safe.cat <- cat
 
 #' @noRd
@@ -94,3 +111,13 @@ package_data_file = function(file) {
   system.file("data", file, package = "swOutput")
 }
 
+#' Call a driver specific function by generic name
+#'
+call_driver_function = function(.func_name, ...) {
+  if( is.null(.config$driver) ) {
+    stop('No driver initialized')
+  }
+  driver_func = paste0(.func_name,"_", .config$driver)
+  args = alist(...)
+  do.call(driver_func, args)
+}

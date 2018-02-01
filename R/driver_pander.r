@@ -2,10 +2,19 @@
 #' pander Driver
 #'
 
-output_open.pander = function(filename, title) {
+output_open_pander = function(filename, title) {
   library(pander)
 
-  fn = file.path(.config$path, paste0(filename, ".", "md"))
+  bin = panderOptions("pandoc.binary")
+  if(bin == "") {
+    sys = Sys.getenv("RSTUDIO_PANDOC")
+    if(sys != "") {
+      bin = paste0(sys, "/pandoc", ifelse(.Platform$OS.type =="windows", ".exe", ""))
+      panderOptions("pandoc.binary", bin)
+    }
+  }
+
+  fn = paste0(.config$path, filename, ".md")
 
   if(file.exists(fn)) {
       file.remove(fn)
@@ -14,16 +23,32 @@ output_open.pander = function(filename, title) {
   .config$report.level = 2
 }
 
-output_done.pander <- function() {
+output_done_pander <- function() {
   opts = output_option('pander')
+
+  working.dir = getwd()
+
+  on.exit(setwd(working.dir))
+
   formats = opts$formats
   if( is.null(formats) ) {
       formats = c('html','docx')
   }
   report.file = .config$report.file
-  sapply(formats, function(format) {
-    Pandoc.convert(report.file, format=format) }
-  )
+
+  dir = dirname(report.file)
+  fn = basename(report.file)
+
+  for(format in formats) {
+    # cat("Converting to ", format)
+    setwd(dir)
+    # cat("before:", getwd())
+    try(Pandoc.convert(fn, format=format))
+    # cat("after:", getwd())
+    setwd(working.dir)
+    # cat("end:", getwd())
+  }
+
 }
 
 write_to_pander = function(o) {
@@ -69,14 +94,14 @@ xcat_pander = function(...,ln=T) {
 }
 
 # Affiche un titre
-xtitle_pander = function(...,level=2) {
+xtitle_pander = function(..., level=2) {
   o = paste0(...)
   if(length(o) > 0 && o != "") {
     write_to_pander(pandoc.header.return(o, level=level))
   }
 }
 
-xbloc_pander = function(..., style=NULL, end=F) {
+xbloc_pander = function(..., style=NULL, end=F, level=NULL) {
   level = .config$report.level
   if( isTRUE(end) ) {
     if(level > 2) {
@@ -87,12 +112,12 @@ xbloc_pander = function(..., style=NULL, end=F) {
   }
   .config$report.level <- level
   if( !end ) {
-    xtitle(..., level=level)
+    xtitle_pander(..., level=level)
   }
 }
 
 xheader_pander <- function(...) {}
-xheader.end_pander <- function(...) {}
+xheader_end_pander <- function(...) {}
 xcomment_pander <- function(...) {}
 
 # add a link
@@ -108,6 +133,6 @@ xalert_pander = function(x, type="warning", ...) {
   write_to_pander(pandoc.strong.return(x))
 }
 
-.output.graph = function(...) {
-     # Not handled yet
+output_graph_pander = function(...) {
+  # Not handled yet
 }

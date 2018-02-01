@@ -17,6 +17,8 @@ out(chisq.test(tt))
 out(women, title="women", name="women")
 
 xbloc("Titre 1")
-xbloc("titre 2")
-xbloc(end=TRUE)
+  xbloc("titre 2")
+    out("testx")
+  xbloc(end=TRUE)
 xbloc()
+

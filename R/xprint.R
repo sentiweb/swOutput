@@ -1,13 +1,4 @@
 
-call_driver_function = function(.func_name, ...) {
-  if( is.null(.config$driver) ) {
-    stop('No driver initialized')
-  }
-  driver_func = paste0(.func_name,"_", .config$driver)
-  args = alist(...)
-  do.call(driver_func, args)
-}
-
 #' Primitive Output object using current driver
 #' @export
 xprint <- function(...) {
