@@ -133,6 +133,6 @@ xalert_pander = function(x, type="warning", ...) {
   write_to_pander(pandoc.strong.return(x))
 }
 
-output_graph_pander = function(...) {
-  # Not handled yet
+output_graph_pander = function(file, name) {
+  write_to_pander(pandoc.image.return(file, caption = name))
 }

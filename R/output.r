@@ -79,8 +79,13 @@ out_title <- function(...) {
 #' @param name name of the graph (caption)
 #' Output a graph into report
 output_graph <- function(file, name) {
-  call_driver_function(output_graph, file=file, name=name)
+  call_driver_function("output_graph", file=file, name=name)
 }
+
+#' @export
+#'
+out_graph = output_graph
+
 
 #' @rdname out_title
 #' @export
