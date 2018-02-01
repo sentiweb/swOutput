@@ -25,6 +25,8 @@
 #'
 NULL # do not remove this null
 
+#' Current config env
+#' @noRd
 .config = new.env(parent=emptyenv())
 
 #' Return the absolute path of a file inside the output path
