@@ -47,7 +47,7 @@ output_file.default <- function(data, name=NULL, ...) {
     }
     data = d
   }
-  write.csv2(data, file=out.path(paste0(name, ".csv")), row.names = FALSE)
+  write.csv2(data, file=out_path(paste0(name, ".csv")), row.names = FALSE)
 }
 
-.output_file = output_file
+#.output_file = output_file

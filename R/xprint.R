@@ -8,7 +8,7 @@ call_driver_function = function(.func_name, ...) {
   do.call(driver_func, args)
 }
 
-#' Output object using current driver
+#' Primitive Output object using current driver
 #' @export
 xprint <- function(...) {
   call_driver_function("xprint", ...)
@@ -21,12 +21,15 @@ xlink <- function(...) {
 }
 
 #' Output an alert
+#' @param x alert message
+#' @param type type of warning message warning|info|danger
 #' @export
 xalert <- function(x, type="warning", ...) {
   call_driver_function("xalert", x=x, type=type, ...)
 }
 
 #' Output an comment
+#' @param ... strings to add as a comment
 #' @export
 xcomment <- function(...) {
   call_driver_function("xcomment", ...)
@@ -44,11 +47,19 @@ xtitle = function(..., level=NULL) {
   call_driver_function("xtitle", ..., level=level)
 }
 
-#' Output block
+#' Output block/section
 #' @export
-xbloc = function(title=NULL, level=F, ...) {
-  call_driver_function("xbloc", ..., level=level)
+#' @param title title of block
+#' @param level level of block
+#' @param end if TRUE declare end of current block
+xbloc = function(title=NULL, level=F, end=FALSE, ...) {
+  call_driver_function("xbloc", ..., level=level, end=end)
 }
 
-xblock <- xbloc
+#' End a block
+#' @export
+xbloc_end <- function() {
+  call_driver_function("xbloc", end=TRUE)
+}
+
 

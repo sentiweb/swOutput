@@ -29,12 +29,13 @@ NULL # do not remove this null
 
 #' Return the absolute path of a file inside the output path
 #' @param ... relative path inside the output path
-out.path = function(...) {
+out_path = function(...) {
   paste0(.config$path, ...)
 }
 
 #' Get package option from name
 #' From 'swOutput' options() entry
+#' @seealso output_options
 output_option = function(name=NULL) {
   o = getOption("swOutput")
   if(is.null(name)) {
@@ -44,6 +45,14 @@ output_option = function(name=NULL) {
   }
 }
 
+
+#' SwOutput Options
+#'
+#' \describe {
+#'  \item{handlers}{list of handlers type=func}
+#'  \item{default.level}{default level of title}
+#'  \item{plugins_path}{path of plugins}
+#' }
 output_options = function(...) {
   opts = list(...)
   oo = getOption("swOutput")
@@ -70,12 +79,17 @@ output_options = function(...) {
   base::options("swOutput"=oo)
 }
 
+#' Is debug activated
+#' @noRd
 is_debug <- function() {
   isTRUE(output_option('debug'))
 }
 
+#' @noRd
+#' Deprecated
 safe.cat <- cat
 
+#' @noRd
 package_data_file = function(file) {
   system.file("data", file, package = "swOutput")
 }
