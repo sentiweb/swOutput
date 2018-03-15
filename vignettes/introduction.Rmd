@@ -36,4 +36,25 @@ Un driver spécial, nommé "console" produit toutes les sorties sur la console, 
 
 ## Ouvrir, fermer un rapport
 
-La fonction `init_output()` permet de déclarer le début d'un rapport
+La fonction `init_output()` permet de déclarer le début d'un rapport.
+
+```{r eval=FALSE}
+  init_output(getwd(), "rapport", type="html")
+```
+
+L'appel ci dessous va créer un fichier dénommé "rapport" dans le répertoire courant en utilisant le driver "html".
+
+
+```{r eval=FALSE}
+  init_output(type="console")
+```
+
+Ouvre un rapport en utilisant le driver "console"
+
+## Les Drivers
+
+3 drivers sont disponibles :
+
+ - console
+ - html : création d'un rapport html
+ - pander : création d'un rapport markdown (qui sera compilé en LateX)
