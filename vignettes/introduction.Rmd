@@ -34,6 +34,15 @@ Au niveau du programme seule des fonctions R sont utilisée pour produire le rap
 
 Un driver spécial, nommé "console" produit toutes les sorties sur la console, ce qui permet de construire le rapport au fur et à mesure de l'écriture du programme en controlant la sortie produite, directement sur la console.
 
+## Les Drivers
+
+3 drivers sont disponibles :
+
+ - console
+ - html : création d'un rapport html
+ - pander : création d'un rapport markdown (qui sera compilé en LateX)
+
+
 ## Ouvrir, fermer un rapport
 
 La fonction `init_output()` permet de déclarer le début d'un rapport.
@@ -51,10 +60,15 @@ L'appel ci dessous va créer un fichier dénommé "rapport" dans le répertoire 
 
 Ouvre un rapport en utilisant le driver "console"
 
-## Les Drivers
+## Ajouter un objet au rapport
 
-3 drivers sont disponibles :
+Pour ajouter un objet dans un rapport, il suffit d'appeler la fonction `out()` en indiquant l'objet comme premier parametre
 
- - console
- - html : création d'un rapport html
- - pander : création d'un rapport markdown (qui sera compilé en LateX)
+```{r eval=FALSE}
+ out(tableau)  # Envoie l'objet 'tableau' dans le rapport en cours.
+```
+
+`out()` possede plusieurs parametres permettant de controler l'insertion dans le rapport
+
+ - `title` rajoute un titre
+ - `name` export l'objet en csv dans le repertoire courant (celui du rapport)
