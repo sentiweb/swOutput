@@ -35,6 +35,8 @@ out_path = function(...) {
 
 #' Get package option from name
 #' From 'swOutput' options() entry
+#' @param name option name to get,
+#' @return one value if name is provided, all if not
 #' @seealso output_options
 output_option = function(name=NULL) {
   o = getOption("swOutput")
@@ -112,7 +114,8 @@ package_data_file = function(file) {
 }
 
 #' Call a driver specific function by generic name
-#'
+#' @param .func_name name of the function to call
+#' @param ... parameters to pass to function
 call_driver_function = function(.func_name, ...) {
   if( is.null(.config$driver) ) {
     stop('No driver initialized')

@@ -1,11 +1,13 @@
 
 #' Primitive Output object using current driver
+#' @param ... data to render
 #' @export
 xprint <- function(...) {
   call_driver_function("xprint", ...)
 }
 
 #' Output a link
+#' @param ... xlink parameters
 #' @export
 xlink <- function(...) {
   call_driver_function("xlink", ...)
@@ -27,12 +29,15 @@ xcomment <- function(...) {
 }
 
 #' Output a string
+#' @param style output style
+#' @param ln if true, add newline
 #' @export
 xcat =  function(..., style=NULL, ln=T) {
   call_driver_function("xcat", style=style, ln=ln, ...)
 }
 
 #' Output a title
+#' @param level title level (not all drivers handle it)
 #' @export
 xtitle = function(..., level=NULL) {
   call_driver_function("xtitle", ..., level=level)

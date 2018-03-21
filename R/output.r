@@ -46,6 +46,8 @@ init_output <- function(path=getwd(), filename="result", title="", type='console
 init.output <- init_output
 
 #' Start a new file (using same output context defined in init.output)
+#' @param filename file report name
+#' @param titre title of report
 #' @export
 start_output <- function(filename, titre="") {
   call_driver_function("output_open", filename=filename, title=titre)
@@ -69,6 +71,7 @@ close_output <- function() {
 close.output <- close_output
 
 #' Make a title section
+#' @param ... coerced to string before render to report
 #' @export
 out_title <- function(...) {
   xtitle(...)
