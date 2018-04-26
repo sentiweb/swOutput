@@ -77,6 +77,7 @@ out.lastgraph <- function(titre="") {
 }
 
 #' Make a title section
+#' @exportClass
 out_title <- function(...) {
  xtitle(...)
 }
