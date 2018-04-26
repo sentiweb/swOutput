@@ -1,17 +1,22 @@
 #' Console output driver
+#'
+#' Output object to console using textual representation
+#'
+#' @name console
+NULL
 
 #' Open output console driver
-#' @rdname output_open
+#' @rdname console
 output_open.console <- function(filename, title) {}
 
 #' Close output console driver
-#' @rdname output_open
+#' @rdname console
 output_done.console <- function() {
 }
 
 #' Output function for console driver
 #' affiche une variable x
-#' @rdname xprint
+#' @rdname console
 xprint_console <- function(x, ...) {
   args = list(...)
   if(!is.null(args$title))  {
@@ -20,9 +25,13 @@ xprint_console <- function(x, ...) {
   print(x)
 }
 
+xalert_console <- function(...) {
+
+}
+
 #' xcat
 #' cat() wrapper
-#' @rdname xcat
+#' @rdname console
 xcat_console <- function(...,ln=T) {
   cat(...)
   if(ln) {
@@ -30,21 +39,22 @@ xcat_console <- function(...,ln=T) {
   }
 }
 
-#' @rdname xtitle
+#' @rdname console
 xtitle_console <- function(..., level=2) {
   cat(...,"\n")
 }
 
-#' @rdname xbloc
+#' @rdname console
 xbloc_console <- function(..., end=F) {
  xcat("----")
 }
 
-#' @rdname xheader
+#' @rdname console
 xheader_console <- function() {}
 
+#' @rdname console
 xheader.end_console <- function() {}
 
 #' add a link
-#' @rdname xlink
+#' @rdname console
 xlink_console = function(filename, text, attr=NULL) {}
