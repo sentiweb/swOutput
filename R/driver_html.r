@@ -204,7 +204,7 @@ xprint_html.table = function(x, title="", ...) {
     xhtml('</tr></tbody></table>')
   }
 }
-xprint_html.tbl_tf <- function(x, ...) {
+xprint_html.tbl_df <- function(x, ...) {
   if( is_debug() ) {
     cat("xprint.table\n")
   }
