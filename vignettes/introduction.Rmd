@@ -1,0 +1,74 @@
+---
+title: "Introduction à swOutput"
+author: "Clément Turbelin"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction à swOutput}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Motivations
+
+swOutput est un package destiné à permettre la création d'un rapport d'analyse (tableaux, graphiques) sous forme d'un document généré au fur et à mesure du programme.
+
+Contrairement à d'autres packages (comme `brew`) qui reposent sur un template a priori du rapport, où le code est R est inclu dans le template, swOutput ne nécessite pas de template.
+
+Les éléments inclus dans le rapport sont ceux que le programme d'analyse envoie explicitement à l'aide de la fonction `out()`.
+
+Ce package a été inspiré de la fonctionnalité ODS de SAS.
+
+## Principes
+
+swOutput peut produire plusieurs type de documents. Chacun de ces types pris en charge par un "driver" spécifique chargé de transformer un objet R (tableau, modèle, vecteur, texte) en un élément du document dans le format voulu.
+
+Au niveau du programme seule des fonctions R sont utilisée pour produire le rapport, quel que soit le driver utilisé, rendant l'écriture du programme d'analyse indépendante du type de document produit. On peut donc produire plusieurs types de documents différents
+
+Un driver spécial, nommé "console" produit toutes les sorties sur la console, ce qui permet de construire le rapport au fur et à mesure de l'écriture du programme en controlant la sortie produite, directement sur la console.
+
+## Les Drivers
+
+3 drivers sont disponibles :
+
+ - console
+ - html : création d'un rapport html
+ - pander : création d'un rapport markdown (qui sera compilé en LateX)
+
+
+## Ouvrir, fermer un rapport
+
+La fonction `init_output()` permet de déclarer le début d'un rapport.
+
+```{r eval=FALSE}
+  init_output(getwd(), "rapport", type="html")
+```
+
+L'appel ci dessous va créer un fichier dénommé "rapport" dans le répertoire courant en utilisant le driver "html".
+
+
+```{r eval=FALSE}
+  init_output(type="console")
+```
+
+Ouvre un rapport en utilisant le driver "console"
+
+## Ajouter un objet au rapport
+
+Pour ajouter un objet dans un rapport, il suffit d'appeler la fonction `out()` en indiquant l'objet comme premier parametre
+
+```{r eval=FALSE}
+ out(tableau)  # Envoie l'objet 'tableau' dans le rapport en cours.
+```
+
+`out()` possede plusieurs parametres permettant de controler l'insertion dans le rapport
+
+ - `title` rajoute un titre
+ - `name` export l'objet en csv dans le repertoire courant (celui du rapport)

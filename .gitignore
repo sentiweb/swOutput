@@ -6,3 +6,6 @@ man/*
 .tests
 _tests
 inst/doc
+vignettes/*.html
+vignettes/*.md
+vignettes/*.R
