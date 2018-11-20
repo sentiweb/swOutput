@@ -70,16 +70,16 @@ close_output <- function() {
 close.output <- close_output
 
 #' Make a title section
-#' @param ... coerced to string before render to report
 #' @export
+#' @param ... coerced to string before render to report
 out_title <- function(...) {
   xtitle(...)
 }
 
+#' Output a graph into report
 #' @export
 #' @param file file
 #' @param name name of the graph (caption)
-#' Output a graph into report
 output_graph <- function(file, name) {
   call_driver_function("output_graph", file=file, name=name)
 }
