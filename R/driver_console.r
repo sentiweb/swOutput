@@ -6,21 +6,12 @@
 NULL
 
 #' Open output console driver
-<<<<<<< HEAD
-#' @rdname console
-output_open.console <- function(filename, title) {}
-
-#' Close output console driver
-#' @rdname console
-output_done.console <- function() {
-=======
 #' @rdname output_open
 output_open_console <- function(filename, title) {}
 
 #' Close output console driver
 #' @rdname output_open
 output_done_console <- function() {
->>>>>>> origin/master
 }
 
 #' Output function for console driver
@@ -61,12 +52,8 @@ xbloc_console <- function(..., end=F) {
 #' @rdname console
 xheader_console <- function() {}
 
-<<<<<<< HEAD
 #' @rdname console
 xheader.end_console <- function() {}
-=======
-xheader_end_console <- function() {}
->>>>>>> origin/master
 
 #' add a link
 #' @rdname console
