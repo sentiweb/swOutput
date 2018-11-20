@@ -1,8 +1,8 @@
 #' Sentiweb Output Library
-#' HTML Output
+#' HTML Output Driver
 
 #' @noRd
-output_open.html = function(filename, title) {
+output_open_html = function(filename, title) {
   library(R2HTML)
   options(R2HTML.format.digits=10)
 
@@ -43,8 +43,14 @@ output_open.html = function(filename, title) {
  }
 
  h = opts$html$header
- h = ifelse(is.null(h), "", h)
- h = paste(h, collapse="\n")
+ if( is.null(h) ) {
+   h = NULL
+ } else {
+  if( is.function(h) ) {
+    h = h()
+  }
+   h = paste(h, collapse="\n")
+ }
 
  file <- file.path(.config$path, paste0(filename, ".", "html"))
 
@@ -61,28 +67,20 @@ output_open.html = function(filename, title) {
 }
 
 #' @noRd
-output_done.html <- function() {
+output_done_html <- function() {
  HTMLEndFile()
 }
 
-# redefine output graph
+#' output graph
 #' @noRd
-.output.graph = function(file, name) {
+output_graph_html = function(file, name) {
   xhtml('<figure class="graph"><img src="',file,'" alt="graph"/><figcaption>',name,'</figcaption></figure>')
 }
 
-
-#' Private functions do not use in external scripts
+#' Output generic html
 #' @noRd
-xdiv = function(x,...) {
-
-}
-
-#' Add an alert section in the output
-#' @rdname xalert
-xalert_html = function(x, type="warning", ...) {
-  clz = c("alert", paste0("alert-", type))
-  xtag("p", value=x, attr=list(class=paste(clz, collapse = " ")))
+xhtml <- function(...) {
+  safe.cat(..., file=.HTML.file, append=T, sep='')
 }
 
 #' Creation d'un tag HTML
@@ -118,14 +116,17 @@ xcomment_html <-  function(...) {
   xhtml(paste("<!-- ",...," -->"))
 }
 
-#' Output generic html
-xhtml <- function(...) {
- safe.cat(..., file=.HTML.file, append=T, sep='')
+
+#' Add an alert section in the output
+#' @rdname xalert
+xalert_html = function(x, type="warning", ...) {
+  clz = c("alert", paste0("alert-", type))
+  xtag("p", value=x, attr=list(class=paste(clz, collapse = " ")))
 }
 
 #' xprint print to the output
 #' @method xprint default
-xprint_html <- function(x, title="",...) {
+xprint_html <- function(x, title="", ...) {
  UseMethod("xprint_html")
 }
 
@@ -161,7 +162,7 @@ xprint_html.default <-  function(x, title="", ...) {
 
 #' @method xprint matrix
 xprint_html.matrix=function(x, title="",...) {
-  xprint.data.frame(x, title=title,...)
+  xprint_html.data.frame(x, title=title,...)
 }
 
 #' @method xprint table
@@ -271,7 +272,7 @@ xtitle_html = function(..., level=NULL) {
  if( is.null(level) ) {
     level = output_option('default.level')
  }
-  HTML.title(paste(...),HR=level)
+ HTML.title(paste(...), HR=level)
 }
 
 #' Add a block section
@@ -312,7 +313,7 @@ xbloc_html = function(title=NULL, end=F, style=NULL, ...) {
 }
 
 #' Add an header
-xheader <- function(title=NULL, sub=NULL) {
+xheader_html <- function(title=NULL, sub=NULL) {
   xhtml('<div id="head">')
   if( !is.null(title) ) {
     xtitle_html(title, level=1)
@@ -325,7 +326,7 @@ xheader <- function(title=NULL, sub=NULL) {
 }
 
 #' End of the header section
-xheader.end <- function() {
+xheader_end_html <- function() {
   xhtml('</div>')
 }
 

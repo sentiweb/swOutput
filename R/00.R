@@ -25,18 +25,19 @@
 #'
 NULL # do not remove this null
 
-#' Current config env
-#' @noRd
 .config = new.env(parent=emptyenv())
 
 #' Return the absolute path of a file inside the output path
 #' @param ... relative path inside the output path
-out.path = function(...) {
+out_path = function(...) {
   paste0(.config$path, ...)
 }
 
 #' Get package option from name
 #' From 'swOutput' options() entry
+#' @param name option name to get,
+#' @return one value if name is provided, all if not
+#' @seealso output_options
 output_option = function(name=NULL) {
   o = getOption("swOutput")
   if(is.null(name)) {
@@ -46,6 +47,31 @@ output_option = function(name=NULL) {
   }
 }
 
+
+#' SwOutput Options
+#'
+#' @param ... list of options to replace (at 1 level)
+#'
+#' @details
+#'
+#' Main options (1st level)
+#' \describe{
+#'  \item{handlers}{list of handlers type=func}
+#'  \item{default.level}{default level of title}
+#'  \item{plugins_path}{path of plugins}
+#'  \item{html}{html driver options}
+#'  \item{pander}{pander driver options}
+#'  \item{inline_css}{add inline css deprecated}
+#' }
+#'
+#' HTML options
+#' \describe{
+#'  \item{css}{css file path}
+#'  \item{theme}{theme name if css not specified}
+#'  \item{css.extra}{extra css files}
+#'  \item{header}{header content or function returning header content}
+#' }
+#'
 output_options = function(...) {
   opts = list(...)
   oo = getOption("swOutput")
@@ -72,13 +98,29 @@ output_options = function(...) {
   base::options("swOutput"=oo)
 }
 
+#' Is debug activated
+#' @noRd
 is_debug <- function() {
   isTRUE(output_option('debug'))
 }
 
+#' Deprecated
+#' @noRd
 safe.cat <- cat
 
+#' @noRd
 package_data_file = function(file) {
   system.file("data", file, package = "swOutput")
 }
 
+#' Call a driver specific function by generic name
+#' @param .func_name name of the function to call
+#' @param ... parameters to pass to function
+call_driver_function = function(.func_name, ...) {
+  if( is.null(.config$driver) ) {
+    stop('No driver initialized')
+  }
+  driver_func = paste0(.func_name,"_", .config$driver)
+  args = alist(...)
+  do.call(driver_func, args)
+}
