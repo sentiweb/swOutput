@@ -1,7 +1,7 @@
 Package: swOutput
 Type: Package
 Title: Sentiweb Output library
-Version: 0.1.1
+Version: 0.1.2
 Author: Clément Turbelin <clement.turbelin@upmc.fr>
 Maintainer: Clément Turbelin <clement.turbelin@upmc.fr>
 Description: More about what it does (maybe more than one line)

@@ -134,5 +134,5 @@ xalert_pander = function(x, type="warning", ...) {
 }
 
 output_graph_pander = function(file, name) {
-  write_to_pander(pandoc.image.return(file, caption = name))
+  write_to_pander(paste0("\n", pandoc.image.return(file, caption = name),"\n"))
 }
