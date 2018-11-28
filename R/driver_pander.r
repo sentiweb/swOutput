@@ -11,9 +11,21 @@ output_open_pander = function(filename, title) {
       path = Sys.getenv("RSTUDIO_PANDOC")
       if(path != "") {
         path = normalizePath(path)
+        if(!file.exists(path)) {
+          warning("Provided path in RSTUDIO_PANDOC doesnt exist")
+        }
         p = Sys.getenv("PATH")
         p = paste0(p, if(substr(p, nchar(p), nchar(p)) != .Platform$path.sep) .Platform$path.sep else "", path)
         Sys.setenv(PATH=p)
+      }
+
+      path = Sys.which("pandoc")
+      if(path != "") {
+        if( file.exists(path) ) {
+          panderOptions("pandoc.binary", path)
+        } else {
+          warning(paste("pandoc path '", path,"' doesnt exist"))
+        }
       }
   }
 

@@ -1,7 +1,7 @@
 Package: swOutput
 Type: Package
 Title: Sentiweb Output library
-Version: 0.1.4
+Version: 0.1.5
 Author: Clément Turbelin <clement.turbelin@upmc.fr>
 Maintainer: Clément Turbelin <clement.turbelin@upmc.fr>
 Description: Sentiweb Templateless report generator.  report document from analysis program only using one function out(). Handle serveral output drivers : console (output to console, useful for dev), html (direct html output) and pander
