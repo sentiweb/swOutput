@@ -55,6 +55,10 @@ write_to_pander = function(o) {
   cat(paste(o, collapse = "\n"), file=.config$report.file, append = TRUE)
 }
 
+wrap_nl = function(...) {
+  paste0("\n", ...,"\n")
+}
+
 #' xprint print to the output
 #' @method xprint_pander default
 xprint_pander <- function(x, title="",...) {
@@ -67,7 +71,7 @@ xprint_pander.default = function(x, ...) {
         xcat(args$title)
     }
     o = pander_return(x)
-    write_to_pander(o)
+    write_to_pander(wrap_nl(o))
 }
 
 #' @method xprint_pander data.frame
@@ -80,7 +84,11 @@ xprint_pander.data.frame=function(x, title="", row.names=F, last.row=F, ...) {
         xcat(title)
         xcat("Tableau vide")
     } else {
-        write_to_pander(pandoc.table.return(x, row.names=row.names, caption=title, justify = "center"))
+      emphasize.strong.rows = NULL
+      if(last.row) {
+        emphasize.strong.rows = nrow(x)
+      }
+      write_to_pander(pandoc.table.return(x, row.names=row.names, caption=title, justify = "center", emphasize.strong.rows=emphasize.strong.rows))
     }
 }
 
@@ -97,7 +105,7 @@ xcat_pander = function(...,ln=T) {
 xtitle_pander = function(..., level=2) {
   o = paste0(...)
   if(length(o) > 0 && o != "") {
-    write_to_pander(pandoc.header.return(o, level=level))
+    write_to_pander(wrap_nl(pandoc.header.return(o, level=level)))
   }
 }
 
@@ -133,6 +141,6 @@ xalert_pander = function(x, type="warning", ...) {
   write_to_pander(pandoc.strong.return(x))
 }
 
-output_graph_pander = function(file, name) {
-  write_to_pander(paste0("\n", pandoc.image.return(file, caption = name),"\n"))
+output_graph_pander = function(file, name=NULL) {
+  write_to_pander(wrap_nl(pandoc.image.return(file, caption = name)))
 }

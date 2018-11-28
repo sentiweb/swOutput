@@ -6,7 +6,7 @@ out(x, title="titre")
 
 data(women)
 
-out(women, title="women")
+out(women, title="women", last.row=TRUE)
 
 tt = as.table(c(10,10,22,12))
 

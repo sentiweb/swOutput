@@ -80,7 +80,7 @@ out_title <- function(...) {
 #' @export
 #' @param file file
 #' @param name name of the graph (caption)
-output_graph <- function(file, name) {
+output_graph <- function(file, name=NULL) {
   call_driver_function("output_graph", file=file, name=name)
 }
 
