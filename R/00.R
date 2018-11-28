@@ -50,6 +50,10 @@ output_option = function(name=NULL) {
 
 #' SwOutput Options
 #'
+#' Define output options
+#'
+#' @export
+#'
 #' @param ... list of options to replace (at 1 level)
 #'
 #' @details
@@ -71,6 +75,12 @@ output_option = function(name=NULL) {
 #'  \item{css.extra}{extra css files}
 #'  \item{header}{header content or function returning header content}
 #' }
+#'
+#' Pander Options
+#' \describe{
+#'  \item{formats}{vector of output formats}
+#' }
+#'
 #'
 output_options = function(...) {
   opts = list(...)

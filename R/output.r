@@ -1,11 +1,11 @@
 #' Start the output using a given output driver
+#' @export
 #' @param path path of the output
 #' @param filename to use (no extension)
 #' @param title tile of the file
 #' @param type output driver to use
-#' @param opts list of options
-#' @param plugins list of plugins
-#' @export
+#' @param opts list of options, will be added to existing ones for the given driver (caution modify global options)
+#' @param plugins list of plugins (implementation not finished)
 init_output <- function(path=getwd(), filename="result", title="", type='console', opts=NULL, plugins=NULL) {
 
   if( length(grep("/$",path)) == 0 ) {
@@ -31,12 +31,26 @@ init_output <- function(path=getwd(), filename="result", title="", type='console
 
   dir.create(path, recursive=T, showWarnings=F)
 
+  if(!is.null(opts)) {
+    oo = output_option(type)
+    if( is.null(oo) ) {
+      oo = opts
+    } else {
+      oo = modifyList(oo, opts)
+    }
+    o = list(oo)
+    names(o) <- type
+    do.call(output_options, o)
+
+  }
+
   # Compatibility issues
   # do.call(output_options, opts)
 
   if( !is.null(filename) ) {
     call_driver_function("output_open", filename=filename, title=title )
   }
+
   invisible()
 }
 

@@ -1,11 +1,10 @@
 Package: swOutput
 Type: Package
 Title: Sentiweb Output library
-Version: 0.1.3
+Version: 0.1.4
 Author: Clément Turbelin <clement.turbelin@upmc.fr>
 Maintainer: Clément Turbelin <clement.turbelin@upmc.fr>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Sentiweb Templateless report generator.  report document from analysis program only using one function out(). Handle serveral output drivers : console (output to console, useful for dev), html (direct html output) and pander
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

@@ -6,12 +6,15 @@ output_open_pander = function(filename, title) {
   library(pander)
 
   bin = panderOptions("pandoc.binary")
+
   if(bin == "") {
-    sys = Sys.getenv("RSTUDIO_PANDOC")
-    if(sys != "") {
-      bin = paste0(sys, "/pandoc", ifelse(.Platform$OS.type =="windows", ".exe", ""))
-      panderOptions("pandoc.binary", bin)
-    }
+      path = Sys.getenv("RSTUDIO_PANDOC")
+      if(path != "") {
+        path = normalizePath(path)
+        p = Sys.getenv("PATH")
+        p = paste0(p, if(substr(p, nchar(p), nchar(p)) != .Platform$path.sep) .Platform$path.sep else "", path)
+        Sys.setenv(PATH=p)
+      }
   }
 
   fn = paste0(.config$path, filename, ".md")
@@ -31,9 +34,7 @@ output_done_pander <- function() {
   on.exit(setwd(working.dir))
 
   formats = opts$formats
-  if( is.null(formats) ) {
-      formats = c('html','docx')
-  }
+
   report.file = .config$report.file
 
   dir = dirname(report.file)
