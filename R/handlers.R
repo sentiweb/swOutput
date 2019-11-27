@@ -15,7 +15,7 @@ output_set_handler <- function(name, func) {
 #' Call list of registred handlers and pass object
 #'
 #' @param x object to render
-#' @param ... extra parameters
+#' @param ... extra parameters to pass to handlers
 #'
 apply_handlers = function(x, ... ) {
   opts = output_option()
@@ -43,13 +43,16 @@ apply_handlers = function(x, ... ) {
 
 #' Default output file handler
 #' @param data data to output
-#' @param ... extra parameters
+#' @param ... extra parameters to pass to methods
 output_file <- function(data, ...) {
   UseMethod("output_file")
 }
 
 #' Default output_file handler
-#' Use the 'name' key in \code{out()}
+#' Use the 'name' key in \code{\link{out}}
+#' @param data to put in a file
+#' @param name name of the file (catch "name" in \code{\link{out}})
+#' @param ... extra parameters (not used)
 output_file.default <- function(data, name=NULL, ...) {
   if(is.null(name) || (is.logical(name) & identical(name, FALSE))) {
     return()

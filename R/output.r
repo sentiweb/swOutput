@@ -4,7 +4,7 @@
 #' @param filename to use (no extension)
 #' @param title tile of the file
 #' @param type output driver to use
-#' @param opts list of options, will be added to existing ones for the given driver (caution modify global options)
+#' @param opts list of options, will be added to existing ones for the given driver see \code{\link{output_options}}
 #' @param plugins list of plugins (implementation not finished)
 init_output <- function(path=getwd(), filename="result", title="", type='console', opts=NULL, plugins=NULL) {
 
@@ -41,7 +41,6 @@ init_output <- function(path=getwd(), filename="result", title="", type='console
     o = list(oo)
     names(o) <- type
     do.call(output_options, o)
-
   }
 
   # Compatibility issues

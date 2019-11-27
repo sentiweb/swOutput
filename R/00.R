@@ -56,9 +56,7 @@ output_option = function(name=NULL) {
 #'
 #' @param ... list of options to replace (at 1 level)
 #'
-#' @details
-#'
-#' Main options (1st level)
+#' @details Main options (1st level):
 #' \describe{
 #'  \item{handlers}{list of handlers type=func}
 #'  \item{default.level}{default level of title}
@@ -68,7 +66,7 @@ output_option = function(name=NULL) {
 #'  \item{inline_css}{add inline css deprecated}
 #' }
 #'
-#' HTML options
+#' @details HTML options:
 #' \describe{
 #'  \item{css}{css file path}
 #'  \item{theme}{theme name if css not specified}
@@ -76,7 +74,7 @@ output_option = function(name=NULL) {
 #'  \item{header}{header content or function returning header content}
 #' }
 #'
-#' Pander Options
+#' @details Pander Options:
 #' \describe{
 #'  \item{formats}{vector of output formats}
 #' }
