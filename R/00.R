@@ -118,7 +118,7 @@ safe.cat <- cat
 
 #' @noRd
 package_data_file = function(file) {
-  system.file("data", file, package = "swOutput")
+  system.file("extdata", file, package = "swOutput")
 }
 
 #' Call a driver specific function by generic name
